@@ -18,6 +18,7 @@ namespace FlightCore
 		std::optional<TimePoint> m_lastUpdateTime{};
 		std::optional<TimePoint> m_ignitionStartTime{};
 		std::optional<TimePoint> m_thrustBuildupStartTime{};
+		std::optional<TimePoint> m_engineCutoffStartTime{};
 		FlightState m_state = FlightState::SAFE;
 		FaultReason m_fault = FaultReason::NONE;
 	};

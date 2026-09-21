@@ -56,6 +56,7 @@ namespace FlightCore
 				l_commandResult = CommandResult::REJECTED;
 			}
 			break;
+		// Following states expect no command. Computer state is checked after command rejection for flight system safety
 		case FlightState::IGNITION:
 		{
 			if (input.m_command != Command::NONE)
@@ -104,7 +105,8 @@ namespace FlightCore
 			}
 			break;
 		}
-		case  FlightState::POWERED_ASCENT:
+		case FlightState::POWERED_ASCENT:
+		{
 			if (input.m_command != Command::NONE)
 			{
 				l_commandResult = CommandResult::REJECTED;
@@ -116,6 +118,50 @@ namespace FlightCore
 				m_fault = FaultReason::UNEXPECTED_ENGINE_SHUTDOWN;
 				break;
 			}
+
+			if (input.m_snapshot.m_bCutoffConditionMet)
+			{
+				m_state = FlightState::ENGINE_CUTOFF;
+				m_engineCutoffStartTime = input.m_currentTime;
+			}
+			break;
+		}
+		case FlightState::ENGINE_CUTOFF:
+		{
+			if (input.m_command != Command::NONE)
+			{
+				l_commandResult = CommandResult::REJECTED;
+			}
+
+			Duration elapsed = input.m_currentTime - m_engineCutoffStartTime.value();
+
+			if (!input.m_snapshot.m_bEngineRunning && elapsed <= m_timeoutConfig.m_engineCutoffTimeout)
+			{
+				m_state = FlightState::COAST;
+			}
+			else if (elapsed >= m_timeoutConfig.m_engineCutoffTimeout)
+			{
+				m_state = FlightState::ABORT;
+				m_fault = FaultReason::ENGINE_CUTOFF_TIMEOUT;
+			}
+			break;
+
+		}
+		case  FlightState::COAST:
+		{
+			if (input.m_command != Command::NONE)
+			{
+				l_commandResult = CommandResult::REJECTED;
+			}
+
+			if (input.m_snapshot.m_bEngineRunning)
+			{
+				m_state = FlightState::ABORT;
+				m_fault = FaultReason::UNEXPECTED_ENGINE_START;
+			}
+			break;
+		}
+		default:
 			break;
 		}
 

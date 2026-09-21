@@ -13,6 +13,7 @@ namespace FlightCore
 	{
 		bool m_bEngineRunning = false;
 		bool m_bLiftoffDetected = false;
+		bool m_bCutoffConditionMet = false;
 	};
 
 	struct ControllerOutput
@@ -27,6 +28,7 @@ namespace FlightCore
 	{
 		std::chrono::milliseconds m_ignitionTimeout = std::chrono::milliseconds(3000);
 		std::chrono::milliseconds m_liftoffTimeout = std::chrono::milliseconds(7000);
+		std::chrono::milliseconds m_engineCutoffTimeout = std::chrono::milliseconds(10000);
 	};
 
 	struct UpdateInput
