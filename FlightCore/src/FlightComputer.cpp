@@ -56,7 +56,7 @@ namespace FlightCore
 				l_commandResult = CommandResult::REJECTED;
 			}
 			break;
-		// Following states expect no command. Computer state is checked after command rejection for flight system safety
+		// Following states expect no command. Reject unexpected commands without skipping sensor-driven safety processing.
 		case FlightState::IGNITION:
 		{
 			if (input.m_command != Command::NONE)
@@ -66,6 +66,7 @@ namespace FlightCore
 
 			Duration elapsed = input.m_currentTime - m_ignitionStartTime.value();
 
+			// Valid sensor confirmation wins at the exact deadline.
 			if (input.m_snapshot.m_bEngineRunning && elapsed <= m_timeoutConfig.m_ignitionTimeout)
 			{
 				m_state = FlightState::THRUST_BUILDUP;
