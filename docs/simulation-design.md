@@ -1,5 +1,13 @@
 # Simulation
 
+## Purpose
+
+The simulation provides a deterministic software-in-the-loop environment for exercising the flight computer with scheduled commands and simulated vehicle feedback. 
+It records each update so nominal behavior, timing boundaries, and injected failures can be inspected and tested.
+
+The initial vehicle model intentionally uses Boolean observations and configurable delays. 
+The simulation architecture allows it to be replaced later by a higher-fidelity physics-based vehicle model without changing the flight computer.
+
 ## Update Sequence
 
 | Step | Owner | Action | 

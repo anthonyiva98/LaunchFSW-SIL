@@ -1,5 +1,12 @@
 # Flight Computer
 
+## Purpose
+
+The flight computer implements the launch control state machine independently of the simulation environment. 
+It processes commands, sensor observations, and externally supplied timestamps to produce ignition commands, flight-state transitions, command results, and fault responses.
+
+This document defines the flight computer’s expected behavior, safety rules, timing boundaries, and state transitions.
+
 ## Transition State 
 
 | Current State | Input\Event | Next State | Output / Observable Result | 
