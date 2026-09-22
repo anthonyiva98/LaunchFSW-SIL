@@ -13,10 +13,29 @@ jobs:
   build-and-test:
     name: Windows MSVC
     runs-on: windows-2022
+    
+    env:
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}\vcpkg-binary-cache
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
+        
+      - name: Prepare vcpkg cache
+        shell: pwsh
+        run: >
+          New-Item
+          -ItemType Directory
+          -Force
+          -Path "$env:VCPKG_DEFAULT_BINARY_CACHE"
+
+      - name: Cache vcpkg binaries
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
 
       - name: Configure
         shell: pwsh
