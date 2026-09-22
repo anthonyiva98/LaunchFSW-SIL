@@ -1,6 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_message.hpp>
 
+#include "TestHelpers.h"
+
 #include "FlightTypes.h"
 #include "sim/BasicVehicleModel.h"
 
@@ -21,21 +23,6 @@ namespace
 		ENGINE_STOPPED
 	};
 
-	BasicVehicleModelConfig genBasicConfig(
-		Duration in_engineStartDelay  = 2s,
-		Duration in_liftoffDelay = 3s,
-		Duration in_poweredAscentDuration = 5s,
-		Duration in_engineStopDelay = 4s
-	)
-	{
-		BasicVehicleModelConfig out_config;
-		out_config.m_engineStartDelay = in_engineStartDelay;
-		out_config.m_liftoffDelay = in_liftoffDelay;
-		out_config.m_poweredAscentDuration = in_poweredAscentDuration;
-		out_config.m_engineStopDelay = in_engineStopDelay;
-		return out_config;
-	}
-
 	struct BasicVehicleTestScenario
 	{
 		BasicVehicleModelConfig m_config;
@@ -45,7 +32,7 @@ namespace
 		Duration m_testElapsed = Duration::zero();
 		NominalVehicleStage m_stage = NominalVehicleStage::INITIAL;
 
-		BasicVehicleTestScenario(BasicVehicleModelConfig in_config = genBasicConfig()) : m_config(in_config), m_vehicle(m_config)
+		BasicVehicleTestScenario(BasicVehicleModelConfig in_config = TestHelpers::MakeBasicVehicleConfig()) : m_config(in_config), m_vehicle(m_config)
 		{
 		}
 
@@ -335,7 +322,7 @@ TEST_CASE("BasicVehicleModel applies forced events", "[BasicVehicleModel]")
 
 TEST_CASE("BasicVehicleModel rounds transitions to the next tick boundary", "[BasicVehicleModel]")
 {
-	BasicVehicleTestScenario scenario( genBasicConfig(2500ms));
+	BasicVehicleTestScenario scenario( TestHelpers::MakeBasicVehicleConfig(2500ms));
 
 	scenario.Step(true, 1s);
 	REQUIRE_FALSE(scenario.m_snapshot.m_bEngineRunning);
@@ -350,7 +337,7 @@ TEST_CASE("BasicVehicleModel rounds transitions to the next tick boundary", "[Ba
 
 TEST_CASE("BasicVehicleModel follows nominal vehicle sequence when no delays", "[BasicVehicleModel]")
 {
-	BasicVehicleTestScenario scenario(genBasicConfig(0s, 0s, 0s, 0s));
+	BasicVehicleTestScenario scenario(TestHelpers::MakeBasicVehicleConfig(0s, 0s, 0s, 0s));
 
 	// Input edge begins engine-start timer immediately.
 	scenario.Step(true, 1s);

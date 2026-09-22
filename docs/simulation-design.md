@@ -27,7 +27,7 @@ Notes
 
 ### Failure injection
 
-The initial simulation supports at most one configured failure per scenario:
+The initial simulation supports scheduled injection of the following vehicle failures:
 - No engine start
 - No liftoff detected
 - Unexpected engine shutdown during powered flight 
@@ -57,6 +57,7 @@ Each simulation cycle records:
 - Ignition command
 - Command result
 - Fault reason
+- Vehicle event
 
 The application presents these records as a readable transition timeline.
 
@@ -129,8 +130,9 @@ Once liftoff_detected or cutoff_condition_met is true, it remains true for the r
 	- Executes update cycles
 	- Records results 
 	- Determines when the scenario ends 
-	- Recieves a fresh FlightComputer instance for each simulation
-	- Recieves a fresh VehicleModel instance for each simulation
+	- Receives a fresh FlightComputer instance for each simulation
+	- Receives a fresh VehicleModel instance for each simulation
+	- A SimulationRunner instance executes exactly one simulation and may only be run once.
 - **VehicleModelInterface**
 	- Boundary between SimulationRunner and any vehicle model
 - **BasicVehicleModel**
@@ -162,8 +164,6 @@ Once liftoff_detected or cutoff_condition_met is true, it remains true for the r
 	- **ScenarioConfig**
 		- list of SimulationScheduleEntry
 		- Termination policy
-		- Expected final flight state
-		- Expected fault reason
 	- **BasicVehicleModelConfig**
 		- Engine-start delay
 		- Liftoff delay
@@ -188,15 +188,14 @@ Once liftoff_detected or cutoff_condition_met is true, it remains true for the r
 - **SimulationResult**: A structure representing the overall result of a simulation scenario.
 	- records: List of SimulationRecord
 	- termination_reason: TerminationReason
-	- final_state: FlightState
-	- final_fault: FaultReason
-- **SimulationScheduleEntry**: A structure representingsch eduled simulation inputs, to be issued at a specific simulation time.
+	- final_controller_output: ControllerOutput
+- **SimulationScheduleEntry**: A structure representing scheduled simulation inputs, to be issued at a specific simulation time.
 	- time: Duration
 	- command: Command
 	- event: VehicleEvent
 - **TerminationReason**: An enumeration representing the reason for scenario termination.
 	- **MAX_DURATION_REACHED**
-	- **FLIGHT_COMPUTER_ABORT**
+	- **ABORT**
 	- **COAST_REACHED**
 
 ## Design Decisions

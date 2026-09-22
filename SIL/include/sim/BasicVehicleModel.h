@@ -51,6 +51,6 @@ namespace Simulation
 		void AdvanceActiveTimers(FlightCore::Duration deltaTime);
 		void ResolveExpiredTimers();
 		void ProcessIgnitionCommandEdges(bool ignitionCommand);
-		const FlightCore::SensorSnapshot BuildSensorSnapshot();
+		FlightCore::SensorSnapshot BuildSensorSnapshot() const;
 	};
 }

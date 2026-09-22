@@ -62,6 +62,7 @@ namespace Simulation
 
 	void BasicVehicleModel::ResolveExpiredTimers()
 	{
+		// Capture expiry state before applying transitions so a timer started by this update cannot also expire until the next vehicle update.
 		const bool engineStartExpired = m_engineStartElapsed.has_value() && m_engineStartElapsed.value() >= m_config.m_engineStartDelay;
 		const bool liftoffExpired = m_liftoffElapsed.has_value() && m_liftoffElapsed.value() >= m_config.m_liftoffDelay;
 		const bool poweredAscentCompleted = m_poweredFlightElapsed.has_value() && m_poweredFlightElapsed.value() >= m_config.m_poweredAscentDuration;
@@ -127,7 +128,7 @@ namespace Simulation
 		}
 	}
 
-	const FlightCore::SensorSnapshot BasicVehicleModel::BuildSensorSnapshot()
+	FlightCore::SensorSnapshot BasicVehicleModel::BuildSensorSnapshot() const
 	{
 		FlightCore::SensorSnapshot out_snapshot;
 		out_snapshot.m_bEngineRunning = m_bEngineRunning;
@@ -138,11 +139,16 @@ namespace Simulation
 
 	FlightCore::SensorSnapshot BasicVehicleModel::Step(bool ignitionCommand, FlightCore::Duration deltaTime)
 	{
+		// Events and command edges apply at the start of the interval.
 		ProcessPendingEvent();
 		ProcessIgnitionCommandEdges(ignitionCommand);
+
+		// Active timers then advance by deltaTime.
 		AdvanceActiveTimers(deltaTime);
 		ResolveExpiredTimers();
 		m_bPreviousIgnitionCommand = ignitionCommand;
+
+		// Returned snapshot represents the vehicle state at the end of that interval.
 		return BuildSensorSnapshot();
 	}
 

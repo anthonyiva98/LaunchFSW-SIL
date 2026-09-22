@@ -1,5 +1,3 @@
-
-
 # Flight Computer
 
 ## Transition State 

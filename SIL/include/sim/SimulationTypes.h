@@ -3,6 +3,7 @@
 #include "FlightTypes.h"
 
 #include <vector>
+#include <utility>
 
 namespace Simulation
 {
@@ -22,6 +23,12 @@ namespace Simulation
 		MAX_DURATION_REACHED,
 		ABORT,
 		COAST_REACHED
+	};
+
+	enum class CoastTerminationPolicy
+	{
+		TERMINATE_ON_COAST,
+		CONTINUE_AFTER_COAST
 	};
 
 	struct SimulationScheduleEntry
@@ -60,9 +67,7 @@ namespace Simulation
 	struct ScenarioConfig
 	{
 		std::vector<SimulationScheduleEntry> m_schedule;
-		TerminationReason m_expectedTerminationReason = TerminationReason::NONE;
-		FlightCore::FlightState m_expectedFinalState = FlightCore::FlightState::SAFE;
-		FlightCore::FaultReason m_expectedFinalFault = FlightCore::FaultReason::NONE;
+		CoastTerminationPolicy m_coastTerminationPolicy = CoastTerminationPolicy::TERMINATE_ON_COAST;
 	};
 
 }
