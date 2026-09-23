@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 
         std::string_view selection = argc == 1 ? "nominal" : argv[1];
 
-        if (selection == "help" || selection == "--help" || selection == "-h")
+        if (selection == "help" || selection == "-help" || selection == "--help" || selection == "-h")
         {
             PrintHelp(std::cout, argv[0]);
         }
