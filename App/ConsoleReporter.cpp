@@ -298,7 +298,7 @@ void PrintSimulationReport(
     output << "Final State: " << FlightStateToString(result.m_finalControllerOutput.m_state) << '\n';
     output << "Final fault: " << FaultToString(result.m_finalControllerOutput.m_fault) << '\n';
 
-    output << "Sequence outcome: "; 
+    output << "Sequence outcome: ";
     if (result.m_terminationReason == Simulation::TerminationReason::ABORT)
         output << "ABORTED" << '\n';
     else if (result.m_terminationReason == Simulation::TerminationReason::COAST_REACHED)
@@ -307,5 +307,4 @@ void PrintSimulationReport(
         output << "INCOMPLETE" << '\n';
     else
         output << "UNKNOWN" << '\n';
-    
 }
