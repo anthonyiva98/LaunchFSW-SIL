@@ -117,7 +117,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence", "[BasicVehicleMo
 	scenario.Step(true, engineStartTargetTime - scenario.m_testElapsed);
 
 	{
-		INFO("Expected engine start at time: " << scenario.m_testElapsed.count());
+		INFO("Expected engine start at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE_FALSE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -130,7 +130,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence", "[BasicVehicleMo
 	scenario.Step(true, liftoffTargetTime - scenario.m_testElapsed);
 
 	{
-		INFO("expected liftoff at time: " << scenario.m_testElapsed.count());
+		INFO("expected liftoff at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -143,7 +143,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence", "[BasicVehicleMo
 	scenario.Step(true, poweredAscentTargetTime - scenario.m_testElapsed);
 
 	{
-		INFO("Expected cutoff conditions met at time: " << scenario.m_testElapsed.count());
+		INFO("Expected cutoff conditions met at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -154,7 +154,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence", "[BasicVehicleMo
 	const Duration shutdownStartTime = scenario.m_testElapsed;
 	scenario.Step(false, tickDuration);
 	{
-		INFO("Expected engine still running at time: " << scenario.m_testElapsed.count());
+		INFO("Expected engine still running at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -166,7 +166,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence", "[BasicVehicleMo
 	scenario.Step(false, shutdownTargetTime - scenario.m_testElapsed);
 
 	{
-		INFO("Expected engine stopped at time: " << scenario.m_testElapsed.count());
+		INFO("Expected engine stopped at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE_FALSE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -343,7 +343,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence when no delays", "
 	scenario.Step(true, 1s);
 
 	{
-		INFO("Expected engine start at time: " << scenario.m_testElapsed.count());
+		INFO("Expected engine start at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE_FALSE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -354,7 +354,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence when no delays", "
 	scenario.Step(true, 1s);
 
 	{
-		INFO("expected liftoff at time: " << scenario.m_testElapsed.count());
+		INFO("expected liftoff at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -365,7 +365,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence when no delays", "
 	scenario.Step(true, 1s);
 
 	{
-		INFO("Expected cutoff conditions met at time: " << scenario.m_testElapsed.count());
+		INFO("Expected cutoff conditions met at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);
@@ -375,7 +375,7 @@ TEST_CASE("BasicVehicleModel follows nominal vehicle sequence when no delays", "
 	// Falling input edge begins the zero-delay stop timer immediately.
 	scenario.Step(false, 1s);
 	{
-		INFO( "Expected engine stopped at time: " << scenario.m_testElapsed.count());
+		INFO( "Expected engine stopped at time: " << std::chrono::duration_cast<std::chrono::milliseconds>(scenario.m_testElapsed).count() << "ms");
 
 		REQUIRE_FALSE(scenario.m_snapshot.m_bEngineRunning);
 		REQUIRE(scenario.m_snapshot.m_bLiftoffDetected);

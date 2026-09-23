@@ -119,7 +119,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		auto output = fsw.Update(input);
 
 		INFO("ARM accepted: expecting transition to ARMED");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::ARMED);
@@ -133,7 +133,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("LAUNCH accepted: expecting transition to IGNITION");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::IGNITION);
@@ -147,7 +147,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("No engine confirmation: expecting to remain in IGNITION.");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::IGNITION);
@@ -162,7 +162,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("ENGINE_RUNNING detected: expecting transition to THRUST_BUILDUP");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::THRUST_BUILDUP);
@@ -176,7 +176,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("No liftoff detected: expecting to remain in THRUST_BUILDUP");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bLiftoffDetected);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::THRUST_BUILDUP);
@@ -191,7 +191,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("LIFTOFF_DETECTED: expecting transition to POWERED_ASCENT");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bLiftoffDetected);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::POWERED_ASCENT);
@@ -205,7 +205,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("Cutoff condition not met: expecting to remain in POWERED_ASCENT.");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bCutoffConditionMet);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::POWERED_ASCENT);
@@ -220,7 +220,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("CUTOFF_CONDITION_MET detected: expecting transition to ENGINE_CUTOFF");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bCutoffConditionMet);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::ENGINE_CUTOFF);
@@ -234,7 +234,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("Engine still running: expecting to remain in ENGINE_CUTOFF");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::ENGINE_CUTOFF);
@@ -249,7 +249,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("ENGINE_RUNNING = false detected: expecting transition to COAST");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::COAST);
@@ -263,7 +263,7 @@ TEST_CASE("FlightComputer Valid Update", "[FlightComputer]")
 		output = fsw.Update(input);
 
 		INFO("COAST detected: expecting stayed in COAST");
-		CAPTURE(currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count());
 		CAPTURE(snapshot.m_bEngineRunning);
 
 		REQUIRE(output.m_state == FlightCore::FlightState::COAST);
@@ -305,7 +305,7 @@ TEST_CASE("FlightComputer Update Command rejection", "[FlightComputer]")
 		scenario.DriveNominallyTo(FlightCore::FlightState::IGNITION);
 
 		INFO("LAUNCH accepted: expecting transition to IGNITION");
-		CAPTURE(scenario.currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.currentTime.time_since_epoch()).count());
 		CAPTURE(scenario.snapshot.m_bEngineRunning);
 
 		REQUIRE(scenario.output.m_state == FlightCore::FlightState::IGNITION);
@@ -338,7 +338,7 @@ TEST_CASE("FlightComputer Update Command rejection", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::ARM);
 
 		INFO("Any command in IGNITION state with engine running confirmation: expecting command rejection, transition to THRUST_BUILDUP");
-		CAPTURE(scenario.currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.currentTime.time_since_epoch()).count());
 		CAPTURE(scenario.snapshot.m_bEngineRunning);
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::THRUST_BUILDUP);
@@ -382,7 +382,7 @@ TEST_CASE("FlightComputer Update Command rejection", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::ARM);
 
 		INFO("Any command in THRUST_BUILDUP state with liftoff detected: expecting command rejection, transition to POWERED_ASCENT");
-		CAPTURE(scenario.currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.currentTime.time_since_epoch()).count());
 		CAPTURE(scenario.snapshot.m_bLiftoffDetected);
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::POWERED_ASCENT);
@@ -425,7 +425,7 @@ TEST_CASE("FlightComputer Update Command rejection", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::ARM);
 
 		INFO("Any command in POWERED_ASCENT state with cutoff detected: expecting command rejection, transition to ENGINE_CUTOFF");
-		CAPTURE(scenario.currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.currentTime.time_since_epoch()).count());
 		CAPTURE(scenario.snapshot.m_bCutoffConditionMet);
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ENGINE_CUTOFF);
@@ -468,7 +468,7 @@ TEST_CASE("FlightComputer Update Command rejection", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::ARM);
 
 		INFO("Any command in ENGINE_CUTOFF state with engine confirmation detected: expecting command rejection, transition to COAST");
-		CAPTURE(scenario.currentTime.time_since_epoch().count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.currentTime.time_since_epoch()).count());
 		CAPTURE(scenario.snapshot.m_bEngineRunning);
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::COAST);
@@ -527,7 +527,7 @@ TEST_CASE("FlightComputer Update IGNITION timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected thrust_build at the deadline with engine on");
-		CAPTURE(scenario.timeoutConfig.m_ignitionTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_ignitionTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::THRUST_BUILDUP);
 		CHECK(scenario.output.m_bIgnitionCommand == true);
@@ -542,7 +542,7 @@ TEST_CASE("FlightComputer Update IGNITION timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected ignition timeout at the deadline with engine off");
-		CAPTURE(scenario.timeoutConfig.m_ignitionTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_ignitionTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -557,7 +557,7 @@ TEST_CASE("FlightComputer Update IGNITION timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected ignition timeout after the deadline regardless of engine state");
-		CAPTURE(scenario.timeoutConfig.m_ignitionTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_ignitionTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -585,7 +585,7 @@ TEST_CASE("FlightComputer Update LIFTOFF timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected POWERED_ASCENT at the deadline with liftoff detected");
-		CAPTURE(scenario.timeoutConfig.m_liftoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_liftoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::POWERED_ASCENT);
 		CHECK(scenario.output.m_bIgnitionCommand == true);
@@ -600,7 +600,7 @@ TEST_CASE("FlightComputer Update LIFTOFF timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected liftoff timeout at the deadline with no liftoff detected");
-		CAPTURE(scenario.timeoutConfig.m_liftoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_liftoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -615,7 +615,7 @@ TEST_CASE("FlightComputer Update LIFTOFF timeout deadline", "[FlightComputer]")
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected liftoff timeout after the deadline regardless of liftoff detection");
-		CAPTURE(scenario.timeoutConfig.m_liftoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_liftoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -643,7 +643,7 @@ TEST_CASE("FlightComputer Update ENGINE_CUTOFF timeout deadline", "[FlightComput
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected COAST at the deadline with engine shutdown confirmed");
-		CAPTURE(scenario.timeoutConfig.m_engineCutoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_engineCutoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::COAST);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -658,7 +658,7 @@ TEST_CASE("FlightComputer Update ENGINE_CUTOFF timeout deadline", "[FlightComput
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected ENGINE_CUTOFF_TIMEOUT at the deadline while the engine remains running");
-		CAPTURE(scenario.timeoutConfig.m_engineCutoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_engineCutoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);
@@ -673,7 +673,7 @@ TEST_CASE("FlightComputer Update ENGINE_CUTOFF timeout deadline", "[FlightComput
 		scenario.Update(FlightCore::Command::NONE, false);
 
 		INFO("Expected ENGINE_CUTOFF_TIMEOUT when engine shutdown is confirmed after the deadline");
-		CAPTURE(scenario.timeoutConfig.m_engineCutoffTimeout.count());
+		CAPTURE(std::chrono::duration_cast<std::chrono::milliseconds>(scenario.timeoutConfig.m_engineCutoffTimeout).count());
 
 		CHECK(scenario.output.m_state == FlightCore::FlightState::ABORT);
 		CHECK(scenario.output.m_bIgnitionCommand == false);

@@ -367,3 +367,6 @@ build/
 out/
 
 .runsettings
+
+# Personal notes
+/personal-notes.txt

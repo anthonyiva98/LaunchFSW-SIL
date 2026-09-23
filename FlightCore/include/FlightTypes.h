@@ -62,9 +62,9 @@ namespace FlightCore
 
 	struct TimeoutConfig
 	{
-		std::chrono::milliseconds m_ignitionTimeout = std::chrono::milliseconds(3000);
-		std::chrono::milliseconds m_liftoffTimeout = std::chrono::milliseconds(7000);
-		std::chrono::milliseconds m_engineCutoffTimeout = std::chrono::milliseconds(10000);
+		Duration m_ignitionTimeout = std::chrono::seconds(3);
+		Duration m_liftoffTimeout = std::chrono::seconds(7);
+		Duration m_engineCutoffTimeout = std::chrono::seconds(10);
 	};
 
 	struct UpdateInput
