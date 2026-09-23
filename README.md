@@ -220,7 +220,6 @@ Tests cover controller transitions, command handling, timing boundaries, fault l
 ## Future Work
 
 - Add a small number of additional injected-fault scenarios.
-- Add lightweight application smoke tests for scenario selection, output outcomes, and exit codes.
 - Exercise the standard C++ implementation with another compiler/platform in CI.
 - Support loading deterministic scenario definitions from a simple data file.
 - Replace the delay-based vehicle model through `VehicleModelInterface` with a higher-fidelity model without changing `FlightComputer`.
